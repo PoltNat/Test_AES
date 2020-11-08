@@ -27,7 +27,61 @@ void InitKey(byte* key, size_t size) {
 		key[i] = rand();
 	}
 }
-void main()
+
+void PrintKey();
+void WriteKey();
+void FullProg();
+
+
+int main(void)
+{
+	char start_int;
+	int count = 0;
+	while (count <= 3)
+	{
+		std::cout << "Hi, you are in a test program \n";
+		std::cout << "1 - Generate a new key and print console \n";
+		std::cout << "2 - Generate a new key and write to a file \n";
+		std::cout << "3 - Generate a new key, encrypt the file and write to the file \n";
+		std::cout << "4 - Exit \n";
+
+		std::cin >> start_int;
+
+		if (start_int == '1') {PrintKey();}
+		if (start_int == '2') {WriteKey();}
+		if (start_int == '3') {FullProg();}
+		if (start_int == '4') {return 0;}
+
+		//switch (start_int)
+		//{
+		//	case '1' : PrintKey();
+		//	case '2' : WriteKey();
+		//	case '3' : FullProg();
+		//	case '4' : return 0;
+		//}
+		count++;
+	}
+
+
+	
+
+	system("PAUSE");
+}
+
+void PrintKey()
+{
+	//Initialize common key and IV with appropriate values CryptoPP::AES::DEFAULT_KEYLENGTH
+	byte key[CryptoPP::AES::MAX_KEYLENGTH];
+	byte iv[CryptoPP::AES::BLOCKSIZE];
+
+	// Initialize common key and IV with appropriate values
+	InitKey(key, sizeof(key));
+	InitKey(iv, sizeof(iv));
+	std::cout << key << "\n";
+	system("PAUSE");
+}
+
+void WriteKey()
 {
 	//Initialize common key and IV with appropriate values CryptoPP::AES::DEFAULT_KEYLENGTH
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
@@ -41,24 +95,46 @@ void main()
 	f = fopen("pass.txt", "w");
 	char str[(sizeof key) + 1];
 	memcpy(str, key, sizeof key);
-	//str[sizeof byteArray] = 0;
 	fputs(str, f);
 	fclose(f);
+	std::cout << key<<"\n";
+	system("PAUSE");
+}
+
+void FullProg()
+{
+	//Initialize common key and IV with appropriate values CryptoPP::AES::DEFAULT_KEYLENGTH
+	byte key[CryptoPP::AES::MAX_KEYLENGTH];
+	byte iv[CryptoPP::AES::BLOCKSIZE];
+
+	// Initialize common key and IV with appropriate values
+	InitKey(key, sizeof(key));
+	InitKey(iv, sizeof(iv));
+
+	//FILE* f;
+	//f = fopen("pass.txt", "w");
+	//char str[(sizeof key) + 1];
+	//memcpy(str, key, sizeof key);
+	//fputs(str, f);
+	//fclose(f);
 
 
-	string plainText = "123jhjkvgvgvkghvghc4";
-	cout << "Plain Text : " << plainText << endl;
+	//string plainText = "123jhjkvgvgvkghvghc4";
+	std::cout << "Input your text\n";
+	string plainText = "";
+	std::cin >> plainText;
+	std::cout << "Plain Text : " << plainText << endl;
 	//Create an encrypted object
 	CryptoPP::CTR_Mode<CryptoPP::AES>::Encryption enc;
 	enc.SetKeyWithIV(key, sizeof(key), iv);
 	string encText;
 	CryptoPP::StreamTransformationFilter encFilter(enc, new CryptoPP::StringSink(encText));
-	
+
 	// encryption
 	encFilter.Put(reinterpret_cast<const byte*>(plainText.c_str()), plainText.size());
 	encFilter.MessageEnd();
-	
-	cout << "Encrypted Text : " << encText << endl;
+
+	std::cout << "Encrypted Text : " << encText << endl;
 	CryptoPP::CTR_Mode<CryptoPP::AES>::Decryption dec;
 	dec.SetKeyWithIV(key, sizeof(key), iv);
 
@@ -69,6 +145,5 @@ void main()
 	decFilter.MessageEnd();
 
 	cout << "Decrypted Text : " << decText << endl;
-
 	system("PAUSE");
 }

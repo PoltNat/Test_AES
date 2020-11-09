@@ -24,13 +24,8 @@ using CryptoPP::AES;
 using CryptoPP::ECB_Mode;
 
 //1.Initialization of key data
-void InitKey(byte* key, size_t size) {
-	srand(time(NULL));
-	for (size_t i = 0; i < size; ++i) {
-		key[i] = rand();
-	}
-}
 
+void InitKey(byte*, size_t);
 void PrintKey();
 void WriteKey();
 void EnProg();
@@ -149,4 +144,11 @@ void DecProg() {
 	decFilter.MessageEnd();
 	cout << "Decrypted Text : " << decText << endl;
 	system("PAUSE");
+}
+
+void InitKey(byte* key, size_t size) {
+	srand(time(NULL));
+	for (size_t i = 0; i < size; ++i) {
+		key[i] = rand();
+	}
 }

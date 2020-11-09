@@ -49,7 +49,7 @@ int main(void)
 		std::cout << "3 - Generate a new key, encrypt the file and write to the file \n";
 		std::cout << "4 - Read key, decrypt the file and print \n";
 		std::cout << "5 - Exit \n";
-
+		std::cout << "Enter your selection ";
 		std::cin >> start_int;
 
 		if (start_int == '1') {PrintKey();}
@@ -104,7 +104,6 @@ void EnProg()
 	ArraySource as(key, sizeof(key), true, new FileSink("key.bin"));
 	ArraySource as1(iv, sizeof(iv), true, new FileSink("iv.bin"));
 
-	//string plainText = "123jhjkvgvgvkghvghc4";
 	std::cout << "Input your text\n";
 	string plainText = "";
 	std::cin >> plainText;

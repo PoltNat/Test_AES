@@ -102,7 +102,7 @@ void EnProg()
 	std::cout << "Input your text\n";
 	string plainText = "";
 	std::cin >> plainText;
-	std::cout << "Plain Text :" << plainText << endl << "key :" <<key<<endl << "iv :" << iv << endl;
+	std::cout << "Plain Text :" << plainText << endl;
 	//Create an encrypted object
 	CryptoPP::CTR_Mode<CryptoPP::AES>::Encryption enc;
 	enc.SetKeyWithIV(key, sizeof(key), iv);
@@ -134,7 +134,7 @@ void DecProg() {
 	FileSource fs("key.bin", true, new ArraySink(key, sizeof(key)));
 	byte iv[CryptoPP::AES::BLOCKSIZE];
 	FileSource fs1("iv.bin", true, new ArraySink(iv, sizeof(iv)));
-	std::cout << "ex ->" << read_text <<endl<<"keys :"<< key<<endl << "iv :" << iv << endl;
+	std::cout << "ex ->" << read_text <<endl;
 	CryptoPP::CTR_Mode<CryptoPP::AES>::Decryption dec;
 	dec.SetKeyWithIV(key, sizeof(key), iv);
 	//Creation of conversion filter for decryption

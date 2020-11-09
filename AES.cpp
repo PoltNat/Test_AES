@@ -23,7 +23,6 @@ using CryptoPP::StreamTransformationFilter;
 using CryptoPP::AES;
 using CryptoPP::ECB_Mode;
 
-//1.Initialization of key data
 
 void InitKey(byte*, size_t);
 void PrintKey();
@@ -59,40 +58,29 @@ int main(void)
 
 void PrintKey()
 {
-	//Initialize common key and IV with appropriate values CryptoPP::AES::DEFAULT_KEYLENGTH
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
 	byte iv[CryptoPP::AES::BLOCKSIZE];
 
-	// Initialize common key and IV with appropriate values
 	InitKey(key, sizeof(key));
 	InitKey(iv, sizeof(iv));
 	std::cout <<"key "<< key << endl << "iv " << iv << endl;
-	system("PAUSE");
 }
 
 void WriteKey()
 {
-	//Initialize common key and IV with appropriate values CryptoPP::AES::DEFAULT_KEYLENGTH
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
 	byte iv[CryptoPP::AES::BLOCKSIZE];
-
-	// Initialize common key and IV with appropriate values
 	InitKey(key, sizeof(key));
 	InitKey(iv, sizeof(iv));
-
 	ArraySource as(key, sizeof(key), true, new FileSink("key.bin"));
 	ArraySource as1(iv, sizeof(iv), true, new FileSink("iv.bin"));
 	std::cout << key<<"\n";
-	system("PAUSE");
 }
 
 void EnProg()
 {
-	//Initialize common key and IV with appropriate values CryptoPP::AES::DEFAULT_KEYLENGTH
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
 	byte iv[CryptoPP::AES::BLOCKSIZE];
-
-	// Initialize common key and IV with appropriate values
 	InitKey(key, sizeof(key));
 	InitKey(iv, sizeof(iv));
 
@@ -108,8 +96,7 @@ void EnProg()
 	enc.SetKeyWithIV(key, sizeof(key), iv);
 	string encText;
 	CryptoPP::StreamTransformationFilter encFilter(enc, new CryptoPP::StringSink(encText));
-
-	// encryption
+	
 	encFilter.Put(reinterpret_cast<const byte*>(plainText.c_str()), plainText.size());
 	encFilter.MessageEnd();
 
@@ -122,7 +109,6 @@ void EnProg()
 
 
 void DecProg() {
-
 	string read_text = "";
 	std::ifstream file("EnText.txt");
 	std::string line;
@@ -137,13 +123,11 @@ void DecProg() {
 	std::cout << "ex ->" << read_text <<endl;
 	CryptoPP::CTR_Mode<CryptoPP::AES>::Decryption dec;
 	dec.SetKeyWithIV(key, sizeof(key), iv);
-	//Creation of conversion filter for decryption
 	string decText;
 	CryptoPP::StreamTransformationFilter decFilter(dec, new CryptoPP::StringSink(decText));
 	decFilter.Put(reinterpret_cast<const byte*>(read_text.c_str()), read_text.size());
 	decFilter.MessageEnd();
 	cout << "Decrypted Text : " << decText << endl;
-	system("PAUSE");
 }
 
 void InitKey(byte* key, size_t size) {

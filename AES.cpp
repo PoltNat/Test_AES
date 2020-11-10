@@ -230,7 +230,6 @@ void InitKey(byte* key, size_t size) {
 
 
 int checkFile(char* file_name) {
-	std::cout << "Start fiend" << endl;
 	ifstream file;
 	file.open(file_name);
 	if (!file)

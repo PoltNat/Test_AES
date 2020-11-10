@@ -23,7 +23,6 @@ using CryptoPP::StreamTransformationFilter;
 using CryptoPP::AES;
 using CryptoPP::ECB_Mode;
 
-//1.Initialization of key data
 
 void InitKey(byte*, size_t);
 int checkFile(char*);
@@ -115,10 +114,8 @@ void PrintKey(void)
 
 void WriteKey(void)
 {
-	//Initialize common key and IV with appropriate values CryptoPP::AES::DEFAULT_KEYLENGTH
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
 	byte iv[CryptoPP::AES::BLOCKSIZE];
-	// Initialize common key and IV with appropriate values
 	InitKey(key, sizeof(key));
 	InitKey(iv, sizeof(iv));
 	ArraySource as(key, sizeof(key), true, new FileSink("key.bin"));
@@ -129,7 +126,6 @@ void WriteKey(void)
 
 void EnProg(void)
 {
-
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
 	byte iv[CryptoPP::AES::BLOCKSIZE];
 	std::cout << "Do you have a generated key\n 1-yes(you must have file key.bin)\n 2-no\n";
@@ -174,24 +170,18 @@ void EnProg(void)
 		ArraySource as1(iv, sizeof(iv), true, new FileSink("iv.bin"));
 
 	}
-
 	std::cout << "Input your text\n";
 	string plainText = "";
 	std::cin >> plainText;
 	std::cout << endl;
 	std::cout << "Plain Text :" << plainText << endl << "key :" <<key<<endl << "iv :" << iv << endl;
-	//Create an encrypted object
 	CryptoPP::CTR_Mode<CryptoPP::AES>::Encryption enc;
 	enc.SetKeyWithIV(key, sizeof(key), iv);
 	string encText;
 	CryptoPP::StreamTransformationFilter encFilter(enc, new CryptoPP::StringSink(encText));
-
-	// encryption
 	encFilter.Put(reinterpret_cast<const byte*>(plainText.c_str()), plainText.size());
 	encFilter.MessageEnd();
-
 	std::cout << "Encrypted Text : " << encText << endl;
-
 	std::ofstream out("EnText.txt");
 	out << encText;
 	out.close();
@@ -217,7 +207,6 @@ void DecProg(void) {
 		std::cout << "ex ->" << read_text << endl << "keys :" << key << endl << "iv :" << iv << endl;
 		CryptoPP::CTR_Mode<CryptoPP::AES>::Decryption dec;
 		dec.SetKeyWithIV(key, sizeof(key), iv);
-		//Creation of conversion filter for decryption
 		string decText;
 		CryptoPP::StreamTransformationFilter decFilter(dec, new CryptoPP::StringSink(decText));
 		decFilter.Put(reinterpret_cast<const byte*>(read_text.c_str()), read_text.size());

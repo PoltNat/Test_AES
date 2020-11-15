@@ -130,7 +130,7 @@ void EnProg(void)
 {
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
 	byte iv[CryptoPP::AES::BLOCKSIZE];
-	cout << "Do you have a generated key\n 1-yes(you must have file key.bin)\n 2-no\n";
+	cout << "Do you have a generated key\n 1-yes(you must have file key.bin and iv.bin)\n 2-no\n";
 	char user_selection;
 	cin >> user_selection;
 	cout << endl;

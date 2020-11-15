@@ -25,7 +25,7 @@ using CryptoPP::ECB_Mode;
 
 void InitKey(byte*, size_t);
 bool checkFile(char*);
-void PrintKey(void);
+void Print_and_Write_Key(void);
 void WriteKey(void);
 void EnProg(void);
 void DecProg(void);
@@ -51,7 +51,7 @@ int main(void)
 
 		switch (start_menu)
 		{
-			case '1': {PrintKey(); continue;  }
+			case '1': {Print_and_Write_Key(); continue;  }
 			case '2': {WriteKey(); continue;  }
 			case '3': {EnProg();   continue;  }
 			case '4': {DecProg();  continue;  }
@@ -62,7 +62,7 @@ int main(void)
 	system("PAUSE");
 }
 
-void PrintKey(void)
+void Print_and_Write_Key(void)
 {
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
 	InitKey(key, sizeof(key));

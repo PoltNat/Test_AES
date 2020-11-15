@@ -55,7 +55,7 @@ int main(void)
 			case '2': {WriteKey(); continue;  }
 			case '3': {EnProg();   continue;  }
 			case '4': {DecProg();  continue;  }
-			case '5': {return 0;   continue;  }
+			case '5': {return 0; }
 		}
 		count++;
 	}

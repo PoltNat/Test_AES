@@ -1,5 +1,4 @@
 
-
 #include "Debug\cryptopp600\aes.h"
 #include "Debug\cryptopp600\cryptlib.h"
 #include "Debug\cryptopp600\filters.h"
@@ -89,17 +88,17 @@ void PrintKey(void)
 	cout << endl;
 	if (user_selection == '1')
 	{
-		byte iv[CryptoPP::AES::BLOCKSIZE];
-		InitKey(iv, sizeof(iv));
+		byte blockLength[CryptoPP::AES::BLOCKSIZE];
+		InitKey(blockLength, sizeof(blockLength));
 		cout << "The new block size was generated, you want to display on the screen(1) or save to a file(2)" << endl;
 		cin >> user_selection;
 		if (user_selection == '1')
 		{
-			cout << "New block size " << iv << endl;
+			cout << "New block size " << blockLength << endl;
 		}
 		else
 		{
-			ArraySource as1(iv, sizeof(iv), true, new FileSink("iv.bin"));
+			ArraySource as1(blockLength, sizeof(blockLength), true, new FileSink("iv.bin"));
 		}
 		
 	}
@@ -117,11 +116,11 @@ void PrintKey(void)
 void WriteKey(void)
 {
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
-	byte iv[CryptoPP::AES::BLOCKSIZE];
+	byte blockLength[CryptoPP::AES::BLOCKSIZE];
 	InitKey(key, sizeof(key));
-	InitKey(iv, sizeof(iv));
+	InitKey(blockLength, sizeof(blockLength));
 	ArraySource as(key, sizeof(key), true, new FileSink("key.bin"));
-	ArraySource as1(iv, sizeof(iv), true, new FileSink("iv.bin"));
+	ArraySource as1(blockLength, sizeof(blockLength), true, new FileSink("iv.bin"));
 	system("PAUSE");
 	cout << endl << endl;
 }
@@ -129,7 +128,7 @@ void WriteKey(void)
 void EnProg(void)
 {
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
-	byte iv[CryptoPP::AES::BLOCKSIZE];
+	byte blockLength[CryptoPP::AES::BLOCKSIZE];
 	cout << "Do you have a generated key\n 1-yes(you must have file key.bin and iv.bin)\n 2-no\n";
 	char user_selection;
 	cin >> user_selection;
@@ -143,27 +142,27 @@ void EnProg(void)
 			{
 				FileSource fs("key.bin", true, new ArraySink(key, sizeof(key)));
 				cout << "Key - OK" << endl;
-				FileSource fs1("iv.bin", true, new ArraySink(iv, sizeof(iv)));
+				FileSource fs1("iv.bin", true, new ArraySink(blockLength, sizeof(blockLength)));
 				cout << "IV - OK" << endl;
 			}
 			else
 			{
 				cout << "Gen new key and block size" << endl;
 				InitKey(key, sizeof(key));
-				InitKey(iv, sizeof(iv));
+				InitKey(blockLength, sizeof(blockLength));
 
 				ArraySource as(key, sizeof(key), true, new FileSink("key.bin"));
-				ArraySource as1(iv, sizeof(iv), true, new FileSink("iv.bin"));
+				ArraySource as1(blockLength, sizeof(blockLength), true, new FileSink("iv.bin"));
 
 			}
 		}
 		case '2':{
 			cout << "Gen new key and block size" << endl;
 			InitKey(key, sizeof(key));
-			InitKey(iv, sizeof(iv));
+			InitKey(blockLength, sizeof(blockLength));
 
 			ArraySource as(key, sizeof(key), true, new FileSink("key.bin"));
-			ArraySource as1(iv, sizeof(iv), true, new FileSink("iv.bin"));
+			ArraySource as1(blockLength, sizeof(blockLength), true, new FileSink("iv.bin"));
 		}
 	}
 
@@ -171,9 +170,9 @@ void EnProg(void)
 	string plainText;
 	cin >> plainText;
 	cout << endl;
-	cout << "Plain Text :" << plainText << endl << "key :" <<key<<endl << "iv :" << iv << endl;
+	cout << "Plain Text :" << plainText << endl << "key :" <<key<<endl << "blockLength :" << blockLength << endl;
 	CryptoPP::CTR_Mode<CryptoPP::AES>::Encryption enc;
-	enc.SetKeyWithIV(key, sizeof(key), iv);
+	enc.SetKeyWithIV(key, sizeof(key), blockLength);
 	string encText;
 	CryptoPP::StreamTransformationFilter encFilter(enc, new CryptoPP::StringSink(encText));
 	encFilter.Put(reinterpret_cast<const byte*>(plainText.c_str()), plainText.size());
@@ -189,10 +188,10 @@ void EnProg(void)
 void DecProg(void) {
 
 	byte key[CryptoPP::AES::MAX_KEYLENGTH];
-	byte iv[CryptoPP::AES::BLOCKSIZE];
+	byte blockLength[CryptoPP::AES::BLOCKSIZE];
 	if ((checkFile(keyFileName) != false)&&(checkFile(blockLengthFileName) != false)) {
 		FileSource fs("key.bin", true, new ArraySink(key, sizeof(key)));
-		FileSource fs1("iv.bin", true, new ArraySink(iv, sizeof(iv)));
+		FileSource fs1("iv.bin", true, new ArraySink(blockLength, sizeof(blockLength)));
 		string encrypted_text;
 		ifstream file("EnText.txt");
 		string line;
@@ -201,9 +200,9 @@ void DecProg(void) {
 			encrypted_text += line;
 		}
 
-		cout << "ex ->" << encrypted_text << endl << "keys :" << key << endl << "iv :" << iv << endl;
+		cout << "ex ->" << encrypted_text << endl << "keys :" << key << endl << "blockLength :" << blockLength << endl;
 		CryptoPP::CTR_Mode<CryptoPP::AES>::Decryption dec;
-		dec.SetKeyWithIV(key, sizeof(key), iv);
+		dec.SetKeyWithIV(key, sizeof(key), blockLength);
 		string decText;
 		CryptoPP::StreamTransformationFilter decFilter(dec, new CryptoPP::StringSink(decText));
 		decFilter.Put(reinterpret_cast<const byte*>(encrypted_text.c_str()), encrypted_text.size());
